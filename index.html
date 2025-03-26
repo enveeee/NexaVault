@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Sentiment Analyzer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+            width: 350px;
+        }
+
+        h2 {
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 50px;
+            font-size: 16px;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            outline: none;
+            resize: none;
+        }
+
+        .emoji-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .emoji {
+            font-size: 24px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .emoji:hover {
+            transform: scale(1.2);
+        }
+
+        .analyze-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+
+        .analyze-btn:hover {
+            background: #3e8e41;
+        }
+
+        .result {
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 18px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>🔍 AI Sentiment Analyzer</h2>
+        <textarea id="userInput" placeholder="Type here..."></textarea>
+        
+        <!-- Emoji options -->
+        <div class="emoji-container">
+            <span class="emoji" onclick="insertEmoji('😀')">😀</span>
+            <span class="emoji" onclick="insertEmoji('😢')">😢</span>
+            <span class="emoji" onclick="insertEmoji('😡')">😡</span>
+            <span class="emoji" onclick="insertEmoji('😍')">😍</span>
+            <span class="emoji" onclick="insertEmoji('😂')">😂</span>
+            <span class="emoji" onclick="insertEmoji('😐')">😐</span>
+        </div>
+
+        <button class="analyze-btn" onclick="analyzeSentiment()">Analyze Sentiment</button>
+        <h3 class="result" id="result"></h3>
+    </div>
+
+    <script>
+        function insertEmoji(emoji) {
+            document.getElementById("userInput").value += emoji;
+        }
+
+        function analyzeSentiment() {
+            let text = document.getElementById("userInput").value;
+            fetch("/analyze", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ text: text })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("result").innerText = "Sentiment: " + data.sentiment;
+            });
+        }
+    </script>
+
+</body>
+</html>
